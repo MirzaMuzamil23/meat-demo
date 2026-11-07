@@ -87,6 +87,26 @@
             tr { page-break-inside: avoid; }
         }
     </style>
+
+    <style>
+        /* Day End Enhanced Buttons - Inline fix for pre-compiled Tailwind */
+        .de-header-actions { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; }
+        .de-btn { display: inline-flex; align-items: center; gap: 6px; font-weight: 900; font-size: 11px; padding: 8px 14px; border-radius: 1rem; cursor: pointer; border: none; transition: all 0.15s; text-transform: uppercase; letter-spacing: 0.03em; }
+        .de-btn-gray { background: #f1f5f9; color: #334155; }
+        .de-btn-gray:hover { background: #e2e8f0; }
+        .de-btn-green { background: #059669; color: #fff; box-shadow: 0 2px 6px rgba(5,150,105,0.3); }
+        .de-btn-green:hover { background: #047857; }
+        .de-filter-row { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; padding: 8px 0; }
+        .de-filter-label { font-size: 10px; font-weight: 900; text-transform: uppercase; color: #94a3b8; }
+        .de-filter-btn { font-size: 10px; font-weight: 900; text-transform: uppercase; padding: 6px 12px; border-radius: 0.75rem; border: none; cursor: pointer; transition: all 0.15s; }
+        .de-filter-btn-active { background: #dc2626; color: #fff; box-shadow: 0 1px 4px rgba(220,38,38,0.4); }
+        .de-filter-btn-inactive { background: #f1f5f9; color: #475569; }
+        .de-filter-btn-inactive:hover { background: #e2e8f0; }
+        .de-summary-cards { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; }
+        @media (min-width: 640px) { .de-summary-cards { grid-template-columns: repeat(4, 1fr); } }
+        .de-summary-card { background: #fff; padding: 16px; border-radius: 1.5rem; border: 1px solid #e2e8f0; box-shadow: 0 1px 2px rgba(0,0,0,0.05); }
+        .de-summary-card-red { background: #dc2626; }
+    </style>
 </head>
 <body class="bg-slate-100 text-slate-900 antialiased selection:bg-red-100 selection:text-red-900">
 
@@ -233,15 +253,7 @@
                     </button>
                 </div>
 
-                <!-- Channel Filter Toggle -->
-                <div class="p-3 bg-slate-950/50 border-b border-slate-800">
-                    <label class="block text-[10px] font-black uppercase text-slate-400 mb-1" data-i18n="channelFilter">Sales Channel Filter</label>
-                    <div class="grid grid-cols-3 gap-1 bg-slate-900 p-1 rounded-xl border border-slate-800 text-[10px] font-bold">
-                        <button onclick="setChannelFilter('all')" id="channel-all" class="py-1 rounded-lg bg-brand-red text-white text-center shadow">All</button>
-                        <button onclick="setChannelFilter('online')" id="channel-online" class="py-1 rounded-lg text-slate-400 hover:text-white text-center">Online</button>
-                        <button onclick="setChannelFilter('physical')" id="channel-physical" class="py-1 rounded-lg text-slate-400 hover:text-white text-center">Shop</button>
-                    </div>
-                </div>
+                
 
                 <!-- Sidebar Nav Links -->
                 <nav class="p-3 space-y-1 text-xs font-bold flex-grow overflow-y-auto">
@@ -263,12 +275,8 @@
                     <button onclick="router.navigate('rates'); toggleMobileSidebar();" id="nav-rates" class="nav-btn w-full flex items-center space-x-3 rtl:space-x-reverse px-3.5 py-2.5 rounded-xl transition text-slate-400 hover:bg-slate-800 hover:text-white">
                         <i class="fa-solid fa-tags w-5 text-center text-red-400"></i> <span data-i18n="navRates">Daily Rates</span>
                     </button>
-                    <button onclick="router.navigate('reports'); toggleMobileSidebar();" id="nav-reports" class="nav-btn w-full flex items-center space-x-3 rtl:space-x-reverse px-3.5 py-2.5 rounded-xl transition text-slate-400 hover:bg-slate-800 hover:text-white">
-                        <i class="fa-solid fa-file-pdf w-5 text-center text-red-400"></i> <span data-i18n="navReports">Reports & Invoices</span>
-                    </button>
-                    <button onclick="router.navigate('suppliers'); toggleMobileSidebar();" id="nav-suppliers" class="nav-btn w-full flex items-center space-x-3 rtl:space-x-reverse px-3.5 py-2.5 rounded-xl transition text-slate-400 hover:bg-slate-800 hover:text-white">
-                        <i class="fa-solid fa-address-book w-5 text-center text-red-400"></i> <span data-i18n="navSuppliers">Suppliers Ledger</span>
-                    </button>
+
+
                 </nav>
 
                 <!-- User Profile & Logout -->
@@ -359,35 +367,7 @@
             </div>
         </div>
 
-        <!-- ADD SUPPLIER MODAL -->
-        <div id="modal-add-supplier" class="fixed inset-0 bg-slate-950/80 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
-            <div class="w-full max-w-md bg-white rounded-3xl p-6 shadow-2xl space-y-4 border border-slate-100">
-                <div class="flex justify-between items-center border-b border-slate-100 pb-3">
-                    <h3 class="font-black text-sm text-slate-900 uppercase">Add New Supplier</h3>
-                    <button onclick="closeSupplierModal()" class="text-slate-400 hover:text-slate-600 p-1"><i class="fa-solid fa-xmark text-lg"></i></button>
-                </div>
-                <div class="space-y-3">
-                    <div>
-                        <label class="block text-[10px] font-black uppercase text-slate-700 mb-1">Supplier Name</label>
-                        <input type="text" id="sup-name" placeholder="e.g. Bismillah Poultry Farm" class="w-full bg-slate-50 border border-slate-200 rounded-2xl px-3 py-2.5 text-xs font-bold text-slate-900 focus:outline-none focus:border-brand-red">
-                    </div>
-                    <div>
-                        <label class="block text-[10px] font-black uppercase text-slate-700 mb-1">Phone Number</label>
-                        <input type="text" id="sup-phone" placeholder="e.g. 0300-1234567" class="w-full bg-slate-50 border border-slate-200 rounded-2xl px-3 py-2.5 text-xs font-bold text-slate-900 focus:outline-none focus:border-brand-red">
-                    </div>
-                    <div>
-                        <label class="block text-[10px] font-black uppercase text-slate-700 mb-1">Opening Balance Owed (Rs) - optional</label>
-                        <input type="number" id="sup-balance" placeholder="e.g. 50000" class="w-full bg-slate-50 border border-slate-200 rounded-2xl px-3 py-2.5 text-xs font-bold text-slate-900 focus:outline-none focus:border-brand-red">
-                    </div>
-                    <p id="sup-error" class="text-[11px] font-bold text-red-600 hidden"></p>
-                </div>
-                <div class="grid grid-cols-2 gap-2">
-                    <button onclick="closeSupplierModal()" class="bg-slate-100 hover:bg-slate-200 text-slate-700 font-black py-3 rounded-2xl text-xs uppercase transition">Cancel</button>
-                    <button onclick="saveSupplier()" class="bg-brand-red hover:bg-brand-redHover text-white font-black py-3 rounded-2xl text-xs uppercase transition shadow-md">Save Supplier</button>
-                </div>
-            </div>
-        </div>
-
+        
     </div>
 
     <!-- JAVASCRIPT APPLICATION LOGIC -->
@@ -521,18 +501,21 @@
 
         /* --- GLOBAL APPLICATION STATE --- */
         let isAuthenticated = false;
-        let activeChannelFilter = 'all'; 
+        let activeChannelFilter = 'all';
         let currentRoute = 'dashboard';
         let selectedDate = '2026-11-04';
 
         // Orders Sub-Tab State
         let activeOrdersTab = 'online'; // 'online' or 'physical'
-        
+
         // Wastage Tab State
         let activeWastageTab = 'chicken'; // 'chicken', 'mutton', 'beef'
 
         // Day End Summary Tab State
         let activeDayEndTab = 'chicken'; // 'chicken', 'beef', 'mutton'
+        let dayEndViewMode = 'daily'; // 'daily' or 'monthly'
+        let selectedMonth = '2026-11';
+        let dayEndReportFilter = 'combined'; // 'combined', 'chicken', 'mutton', 'beef'
 
         // Daily Rates Tab State
         let activeRatesTab = 'chicken';
@@ -577,11 +560,6 @@
             { id: 'POS-4403', date: '2026-11-04', items: '2 kg Beef Undercut', total: 2900, payment: 'Cash Scale', source: 'Shop Counter', channel: 'online' }
         ];
 
-        let suppliersData = [
-            { name: 'Bismillah Poultry Farm', phone: '0300-1234567', totalBought: 280000, totalPaid: 180000, remainingBalance: 100000, lastStatus: 'Half Paid' },
-            { name: 'Karachi Cattle Farm', phone: '0312-9876543', totalBought: 450000, totalPaid: 450000, remainingBalance: 0, lastStatus: 'Full Paid' },
-            { name: 'Al-Madina Livestock', phone: '0333-4567890', totalBought: 310000, totalPaid: 100000, remainingBalance: 210000, lastStatus: 'Full Credit' }
-        ];
 
         // Day End figures per category (online + physical revenue, profit, closing stock)
         const dayEndSales = {
@@ -668,8 +646,6 @@
                 else if (currentRoute === 'close-day') target.innerHTML = renderCloseDayView();
                 else if (currentRoute === 'purchases') target.innerHTML = renderPurchasesView();
                 else if (currentRoute === 'rates') target.innerHTML = renderRatesView();
-                else if (currentRoute === 'reports') target.innerHTML = renderReportsView();
-                else if (currentRoute === 'suppliers') target.innerHTML = renderSuppliersView();
             }
         };
 
@@ -703,14 +679,6 @@
                             <div class="mt-1 text-[10px] font-bold text-emerald-600">+14.2% vs prev day</div>
                         </div>
 
-                        <div class="bg-white p-4 rounded-3xl border border-slate-200 shadow-sm col-span-1">
-                            <div class="flex justify-between items-center text-slate-400 mb-1">
-                                <span class="text-[10px] font-black uppercase text-slate-500">${t.purchases}</span>
-                                <i class="fa-solid fa-truck-ramp-box text-brand-red text-xs"></i>
-                            </div>
-                            <div class="text-base sm:text-xl font-black text-slate-900">Rs. 417,750</div>
-                            <div class="mt-1 text-[10px] font-bold text-slate-500">3 Purchases</div>
-                        </div>
 
                         <div class="bg-white p-4 rounded-3xl border border-slate-200 shadow-sm col-span-1">
                             <div class="flex justify-between items-center text-slate-400 mb-1">
@@ -758,16 +726,16 @@
                                     <line x1="0" y1="30" x2="500" y2="30" stroke="#f1f5f9" stroke-width="1" />
                                     <line x1="0" y1="75" x2="500" y2="75" stroke="#f1f5f9" stroke-width="1" />
                                     <line x1="0" y1="120" x2="500" y2="120" stroke="#f1f5f9" stroke-width="1" />
-                                    
+
                                     <!-- Sales Area Fill -->
                                     <polygon points="0,120 70,80 140,95 210,40 280,60 350,30 420,55 500,20 500,140 0,140" fill="rgba(220, 38, 38, 0.08)" />
-                                    
+
                                     <!-- Sales Red Line -->
                                     <polyline points="0,120 70,80 140,95 210,40 280,60 350,30 420,55 500,20" fill="none" stroke="#dc2626" stroke-width="3" stroke-linecap="round" />
-                                    
+
                                     <!-- Purchases Slate Line -->
                                     <polyline points="0,100 70,110 140,70 210,90 280,45 350,85 420,40 500,60" fill="none" stroke="#475569" stroke-width="2" stroke-dasharray="4,4" />
-                                    
+
                                     <!-- Data Dots -->
                                     <circle cx="210" cy="40" r="4" fill="#dc2626" />
                                     <circle cx="350" cy="30" r="4" fill="#dc2626" />
@@ -1196,6 +1164,37 @@
         }
 
         /* --- ROUTE 4: DAY END SUMMARY (4 TABS WITH DATE PICKER) --- */
+        function downloadDayEndCSV() {
+            const rows = [['Date','Category','Morning Stock (kg)','Morning Value','Revenue Online','Revenue Physical','Profit','Remaining kg']];
+            const cats = ['chicken','beef','mutton'];
+            if (dayEndViewMode === 'daily') {
+                cats.forEach(cat => {
+                    const d = dayEndSales[cat];
+                    rows.push([selectedDate, cat, d.morningKg, d.morningVal, d.online, d.physical, d.profit, d.remaining]);
+                });
+            } else {
+                Object.keys(monthlyDayData).forEach(day => {
+                    cats.forEach(cat => {
+                        const d = monthlyDayData[day][cat] || dayEndSales[cat];
+                        rows.push([day, cat, d.morningKg, d.morningVal, d.online, d.physical, d.profit, d.remaining]);
+                    });
+                });
+            }
+            const csv = rows.map(r => r.join(',')).join('\n');
+            const blob = new Blob([csv], {type: 'text/csv'});
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a'); a.href = url; a.download = 'day_end_summary.csv'; a.click();
+            URL.revokeObjectURL(url);
+        }
+
+        const monthlyDayData = {
+            '2026-11-01': { chicken: {morningKg:290,morningVal:107300,online:48000,physical:62000,profit:19000,remaining:48}, beef: {morningKg:120,morningVal:66000,online:28000,physical:36000,profit:9500,remaining:22}, mutton: {morningKg:85,morningVal:68000,online:22000,physical:30000,profit:8000,remaining:15} },
+            '2026-11-02': { chicken: {morningKg:310,morningVal:114700,online:52000,physical:65000,profit:21000,remaining:52}, beef: {morningKg:130,morningVal:71500,online:30000,physical:38000,profit:10200,remaining:25}, mutton: {morningKg:90,morningVal:72000,online:24000,physical:33000,profit:9000,remaining:18} },
+            '2026-11-03': { chicken: {morningKg:280,morningVal:103600,online:46000,physical:60000,profit:17500,remaining:44}, beef: {morningKg:115,morningVal:63250,online:26000,physical:34000,profit:8800,remaining:20}, mutton: {morningKg:80,morningVal:64000,online:20000,physical:28000,profit:7200,remaining:14} },
+            '2026-11-04': { chicken: {morningKg:325,morningVal:120250,online:55000,physical:68000,profit:22500,remaining:55}, beef: {morningKg:140,morningVal:77000,online:32000,physical:42000,profit:11500,remaining:28}, mutton: {morningKg:95,morningVal:76000,online:26000,physical:36000,profit:9800,remaining:20} },
+            '2026-11-05': { chicken: {morningKg:295,morningVal:109150,online:49000,physical:63000,profit:19800,remaining:50}, beef: {morningKg:125,morningVal:68750,online:29000,physical:37000,profit:9800,remaining:23}, mutton: {morningKg:88,morningVal:70400,online:23000,physical:32000,profit:8400,remaining:16} },
+        };
+
         function renderCloseDayView() {
             const t = translations[currentLang];
             const cat = activeDayEndTab;
@@ -1204,10 +1203,17 @@
             const rev = d.online + d.physical;
             const margin = rev ? (d.profit / rev * 100) : 0;
             const buys = purchasesData.filter(p => p.category === cat && p.date === selectedDate);
+
             const tabBtn = (key, label) => `
                         <button onclick="activeDayEndTab = '${key}'; router.render();" class="py-2.5 rounded-xl transition ${cat === key ? 'bg-brand-red text-white shadow-md' : 'text-slate-600 hover:text-slate-900'}">
                             ${label}
                         </button>`;
+
+            const reportFilterBtn = (key, label) => `
+                <button onclick="dayEndReportFilter='${key}'; router.render();" class="de-filter-btn ${dayEndReportFilter===key ? 'de-filter-btn-active' : 'de-filter-btn-inactive'}">
+                    ${label}
+                </button>`;
+
             const boughtBlock = p => {
                 let label, amount, cls, badge = '';
                 if (p.paymentType === 'full') { label = 'Full Amount Paid'; amount = p.total; cls = 'text-emerald-600'; }
@@ -1230,30 +1236,189 @@
                         </div>
                     </div>`;
             };
+
+            // --- Monthly view logs table ---
+            const buildMonthlyTable = () => {
+                const cats = dayEndReportFilter === 'combined' ? ['chicken','beef','mutton'] : [dayEndReportFilter];
+                const days = Object.keys(monthlyDayData).sort();
+                let totalOnline = 0, totalPhysical = 0, totalProfit = 0;
+                const rows = days.flatMap(day => cats.map(c => {
+                    const d2 = monthlyDayData[day][c] || {online:0,physical:0,profit:0,morningKg:0,remaining:0};
+                    totalOnline += d2.online; totalPhysical += d2.physical; totalProfit += d2.profit;
+                    return `<tr class="hover:bg-slate-50 transition">
+                        <td class="p-3 font-bold text-slate-600">${day}</td>
+                        <td class="p-3"><span class="px-2 py-0.5 rounded-full text-[9px] font-black uppercase ${c==='chicken'?'bg-amber-100 text-amber-800':c==='beef'?'bg-red-100 text-red-800':'bg-emerald-100 text-emerald-800'}">${c}</span></td>
+                        <td class="p-3 font-black text-slate-900">${d2.morningKg} kg</td>
+                        <td class="p-3 font-bold text-emerald-700">Rs. ${d2.online.toLocaleString()}</td>
+                        <td class="p-3 font-bold text-blue-700">Rs. ${d2.physical.toLocaleString()}</td>
+                        <td class="p-3 font-black text-brand-red">Rs. ${(d2.online+d2.physical).toLocaleString()}</td>
+                        <td class="p-3 font-bold text-emerald-600">Rs. ${d2.profit.toLocaleString()}</td>
+                        <td class="p-3 font-bold text-slate-500">${d2.remaining} kg</td>
+                    </tr>`;
+                }));
+                return `
+                    <div class="overflow-x-auto w-full">
+                        <table class="w-full text-left text-xs text-slate-800 whitespace-nowrap min-w-[700px]">
+                            <thead class="bg-slate-50 text-slate-500 uppercase font-black text-[10px] border-b border-slate-200">
+                                <tr>
+                                    <th class="p-3">Date</th>
+                                    <th class="p-3">Category</th>
+                                    <th class="p-3">Morning Stock</th>
+                                    <th class="p-3">Online Rev</th>
+                                    <th class="p-3">Shop Rev</th>
+                                    <th class="p-3">Total Revenue</th>
+                                    <th class="p-3">Profit</th>
+                                    <th class="p-3">Remaining</th>
+                                </tr>
+                            </thead>
+                            <tbody class="divide-y divide-slate-100 font-medium">
+                                ${rows.join('')}
+                            </tbody>
+                            <tfoot class="bg-brand-red/5 font-black text-xs border-t-2 border-brand-red">
+                                <tr>
+                                    <td class="p-3 text-brand-red uppercase" colspan="3">Month Total</td>
+                                    <td class="p-3 text-emerald-700">Rs. ${totalOnline.toLocaleString()}</td>
+                                    <td class="p-3 text-blue-700">Rs. ${totalPhysical.toLocaleString()}</td>
+                                    <td class="p-3 text-brand-red">Rs. ${(totalOnline+totalPhysical).toLocaleString()}</td>
+                                    <td class="p-3 text-emerald-600">Rs. ${totalProfit.toLocaleString()}</td>
+                                    <td class="p-3 text-slate-500">—</td>
+                                </tr>
+                            </tfoot>
+                        </table>
+                    </div>`;
+            };
+
+            // --- Daily view logs table ---
+            const buildDailyLogsTable = () => {
+                const logs = purchasesData.filter(p => p.category === cat && p.date === selectedDate);
+                if (!logs.length) return '<div class="text-center text-slate-400 font-bold text-xs p-4 bg-slate-50 rounded-2xl border border-slate-200">No purchase logs for this date.</div>';
+                return `
+                    <div class="overflow-x-auto w-full">
+                        <table class="w-full text-left text-xs text-slate-800 whitespace-nowrap min-w-[500px]">
+                            <thead class="bg-slate-50 text-slate-500 uppercase font-black text-[10px] border-b border-slate-200">
+                                <tr>
+                                    <th class="p-3">ID</th><th class="p-3">Weight</th><th class="p-3">Rate/kg</th>
+                                    <th class="p-3">Total</th><th class="p-3">Supplier</th><th class="p-3">Status</th>
+                                </tr>
+                            </thead>
+                            <tbody class="divide-y divide-slate-100 font-medium">
+                                ${logs.map(p => `<tr class="hover:bg-slate-50">
+                                    <td class="p-3 font-bold text-slate-500">${p.id||'—'}</td>
+                                    <td class="p-3 font-black text-slate-900">${p.weight}kg${p.birds?' ('+p.birds+' birds)':''}</td>
+                                    <td class="p-3">Rs. ${p.rate}</td>
+                                    <td class="p-3 font-black text-brand-red">Rs. ${p.total.toLocaleString()}</td>
+                                    <td class="p-3">${p.supplier}</td>
+                                    <td class="p-3"><span class="px-2 py-0.5 rounded text-[9px] font-black uppercase ${p.paymentType==='full'?'bg-emerald-100 text-emerald-800':'bg-amber-100 text-amber-800'}">${p.paymentType}</span></td>
+                                </tr>`).join('')}
+                            </tbody>
+                        </table>
+                    </div>`;
+            };
+
+            if (dayEndViewMode === 'monthly') {
+                return `
+                    <div class="space-y-4 sm:space-y-6">
+                        <!-- Header -->
+                        <div class="bg-white p-4 sm:p-6 rounded-3xl border border-slate-200 shadow-sm flex flex-col sm:flex-row justify-between sm:items-start gap-3">
+                            <div>
+                                <span class="text-[10px] font-black uppercase tracking-widest text-brand-red">Monthly Overview</span>
+                                <h2 class="text-lg sm:text-2xl font-black text-slate-900 uppercase">Day End Summary</h2>
+                                <p class="text-xs text-slate-500 font-medium">Full month breakdown — Chicken, Mutton & Beef</p>
+                            </div>
+                            <div class="de-header-actions">
+                                <div class="flex items-center space-x-2 bg-slate-50 p-2 rounded-2xl border border-slate-200">
+                                    <i class="fa-regular fa-calendar-days text-brand-red text-xs"></i>
+                                    <input type="month" value="${selectedMonth}" onchange="selectedMonth=this.value; router.render();" class="bg-white border border-slate-200 rounded-xl px-2.5 py-1 text-xs font-bold text-slate-800 focus:outline-none">
+                                </div>
+                                <button onclick="dayEndViewMode='daily'; router.render();" class="de-btn de-btn-gray">
+                                    <i class="fa-solid fa-calendar-day"></i>Daily View
+                                </button>
+                                <button onclick="downloadDayEndCSV();" class="de-btn de-btn-green">
+                                    <i class="fa-solid fa-download"></i>Download CSV
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Monthly Summary Cards -->
+                        <div class="grid grid-cols-2 sm:grid-cols-4 gap-3">
+                            ${['chicken','beef','mutton'].map(c => {
+                                const totRev = Object.values(monthlyDayData).reduce((s,day) => s + ((day[c]||{}).online||0) + ((day[c]||{}).physical||0), 0);
+                                const totProfit = Object.values(monthlyDayData).reduce((s,day) => s + ((day[c]||{}).profit||0), 0);
+                                const color = c==='chicken'?'amber':c==='beef'?'red':'emerald';
+                                return `<div class="bg-white p-4 rounded-3xl border border-slate-200 shadow-sm">
+                                    <span class="text-[10px] font-black uppercase text-${color}-600 tracking-wider">${c} MTD</span>
+                                    <div class="text-base font-black text-slate-900 mt-1">Rs. ${totRev.toLocaleString()}</div>
+                                    <div class="text-[10px] font-bold text-emerald-600 mt-0.5">Profit Rs. ${totProfit.toLocaleString()}</div>
+                                </div>`;
+                            }).join('')}
+                            <div class="bg-brand-red p-4 rounded-3xl shadow-sm">
+                                <span class="text-[10px] font-black uppercase text-red-200 tracking-wider">Total MTD</span>
+                                <div class="text-base font-black text-white mt-1">Rs. ${Object.values(monthlyDayData).reduce((s,day) => s + Object.values(day).reduce((s2,d2) => s2 + d2.online + d2.physical, 0), 0).toLocaleString()}</div>
+                                <div class="text-[10px] font-bold text-red-200 mt-0.5">Combined Revenue</div>
+                            </div>
+                        </div>
+
+                        <!-- Report Type Filter -->
+                        <div class="bg-white p-4 rounded-3xl border border-slate-200 shadow-sm">
+                            <div class="de-filter-row" style="margin-bottom:16px">
+                                <span class="de-filter-label">Report Filter:</span>
+                                ${reportFilterBtn('combined','Combined Sales Report')}
+                                ${reportFilterBtn('chicken','Chicken Yield & Shrinkage')}
+                                ${reportFilterBtn('beef','Beef Performance')}
+                                ${reportFilterBtn('mutton','Mutton Performance')}
+                            </div>
+                            <h3 class="font-black text-xs text-slate-900 uppercase tracking-wider border-b border-slate-100 pb-2 mb-3">
+                                Monthly Logs — ${dayEndReportFilter === 'combined' ? 'All Categories' : dayEndReportFilter.toUpperCase()}
+                            </h3>
+                            ${buildMonthlyTable()}
+                        </div>
+                    </div>`;
+            }
+
+            // === DAILY VIEW ===
             return `
                 <div class="space-y-4 sm:space-y-6">
-                    <div class="bg-white p-4 sm:p-6 rounded-3xl border border-slate-200 shadow-sm flex flex-col sm:flex-row justify-between sm:items-center gap-3">
+                    <!-- Header -->
+                    <div class="bg-white p-4 sm:p-6 rounded-3xl border border-slate-200 shadow-sm flex flex-col sm:flex-row justify-between sm:items-start gap-3">
                         <div>
                             <span class="text-[10px] font-black uppercase tracking-widest text-brand-red">Closing Balance Audit</span>
                             <h2 class="text-lg sm:text-2xl font-black text-slate-900 uppercase">${t.dayEndTitle}</h2>
                             <p class="text-xs text-slate-500 font-medium">Detailed audit of Morning Stock, Purchases, Sales Revenue & Remaining Stock</p>
                         </div>
-                        <div class="flex items-center space-x-2 rtl:space-x-reverse bg-slate-50 p-2 rounded-2xl border border-slate-200 self-start sm:self-auto">
-                            <i class="fa-regular fa-calendar-days text-brand-red text-xs"></i>
-                            <span class="text-[11px] font-black text-slate-700">Date:</span>
-                            <input type="date" value="${selectedDate}" onchange="selectedDate = this.value; router.render();" class="bg-white border border-slate-200 rounded-xl px-2.5 py-1 text-xs font-bold text-slate-800 focus:outline-none">
+                        <div class="de-header-actions">
+                            <div class="flex items-center space-x-2 bg-slate-50 p-2 rounded-2xl border border-slate-200">
+                                <i class="fa-regular fa-calendar-days text-brand-red text-xs"></i>
+                                <span class="text-[11px] font-black text-slate-700">Date:</span>
+                                <input type="date" value="${selectedDate}" onchange="selectedDate = this.value; router.render();" class="bg-white border border-slate-200 rounded-xl px-2.5 py-1 text-xs font-bold text-slate-800 focus:outline-none">
+                            </div>
+                            <button onclick="dayEndViewMode='monthly'; router.render();" class="de-btn de-btn-gray">
+                                <i class="fa-solid fa-calendar-week"></i>Monthly View
+                            </button>
+                            <button onclick="downloadDayEndCSV();" class="de-btn de-btn-green">
+                                <i class="fa-solid fa-download"></i>Download CSV
+                            </button>
                         </div>
                     </div>
 
-                    <!-- 3 Category Tabs -->
-                    <div class="grid grid-cols-3 gap-2 bg-white p-1.5 rounded-2xl border border-slate-200 shadow-sm font-black text-xs">
-                        ${tabBtn('chicken', t.chicken)}${tabBtn('beef', t.beef)}${tabBtn('mutton', t.mutton)}
+                    <!-- 3 Category Tabs with Filter Buttons -->
+                    <div class="bg-white p-3 rounded-3xl border border-slate-200 shadow-sm space-y-3">
+                        <div class="grid grid-cols-3 gap-2 bg-slate-50 p-1.5 rounded-2xl border border-slate-100 font-black text-xs">
+                            ${tabBtn('chicken', t.chicken)}${tabBtn('beef', t.beef)}${tabBtn('mutton', t.mutton)}
+                        </div>
+                        <!-- Report Type Filter inside tab -->
+                        <div class="de-filter-row">
+                            <span class="de-filter-label">View:</span>
+                            ${reportFilterBtn('combined','Combined Sales Report')}
+                            ${reportFilterBtn('chicken','Chicken Yield & Shrinkage')}
+                            ${reportFilterBtn('beef','Beef Analysis')}
+                            ${reportFilterBtn('mutton','Mutton Analysis')}
+                        </div>
                     </div>
 
                     <div class="bg-white p-4 sm:p-6 rounded-3xl border border-slate-200 shadow-sm space-y-6">
                         <!-- Morning Stock -->
                         <div class="space-y-3">
-                            <h3 class="font-black text-xs text-slate-900 uppercase tracking-wider border-b border-slate-100 pb-2">${t.morningStock} - ${catName} (${selectedDate})</h3>
+                            <h3 class="font-black text-xs text-slate-900 uppercase tracking-wider border-b border-slate-100 pb-2">${t.morningStock} — ${catName} (${selectedDate})</h3>
                             <div class="bg-slate-50 p-4 rounded-2xl border border-slate-200 sm:max-w-xs">
                                 <span class="text-[10px] font-black uppercase text-slate-500">${catName} Opening</span>
                                 <div class="text-lg font-black text-slate-900 mt-1">${d.morningKg.toFixed(1)} kg</div>
@@ -1263,14 +1428,14 @@
 
                         <!-- Bought Amount -->
                         <div class="space-y-3">
-                            <h3 class="font-black text-xs text-slate-900 uppercase tracking-wider border-b border-slate-100 pb-2">${t.boughtAmt} - ${catName} (${selectedDate})</h3>
+                            <h3 class="font-black text-xs text-slate-900 uppercase tracking-wider border-b border-slate-100 pb-2">${t.boughtAmt} — ${catName} (${selectedDate})</h3>
                             ${buys.length ? buys.map(boughtBlock).join('') : '<div class="p-4 text-center text-slate-400 font-bold text-xs bg-slate-50 rounded-2xl border border-slate-200">No purchase recorded for this date.</div>'}
                         </div>
 
                         <!-- Sold Revenue -->
                         <div class="space-y-3">
-                            <h3 class="font-black text-xs text-slate-900 uppercase tracking-wider border-b border-slate-100 pb-2">${t.soldRev} - ${catName} (${selectedDate})</h3>
-                            <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                            <h3 class="font-black text-xs text-slate-900 uppercase tracking-wider border-b border-slate-100 pb-2">${t.soldRev} — ${catName} (${selectedDate})</h3>
+                            <div class="grid grid-cols-2 sm:grid-cols-3 gap-3">
                                 <div class="bg-emerald-50 p-4 rounded-2xl border border-emerald-100">
                                     <span class="text-[10px] font-black uppercase text-emerald-800">Online Revenue</span>
                                     <div class="text-lg font-black text-emerald-700 mt-1">Rs. ${d.online.toLocaleString()}</div>
@@ -1282,23 +1447,28 @@
                                 <div class="bg-emerald-50 p-4 rounded-2xl border border-emerald-100">
                                     <span class="text-[10px] font-black uppercase text-emerald-800">Gross Profit</span>
                                     <div class="text-lg font-black text-slate-900 mt-1">${margin.toFixed(1)}%</div>
-                                    <span class="text-[10px] text-slate-400 font-bold">On Rs. ${rev.toLocaleString()} total sales</span>
+                                    <span class="text-[10px] text-slate-400 font-bold">On Rs. ${rev.toLocaleString()} total</span>
                                 </div>
                                 <div class="bg-emerald-50 p-4 rounded-2xl border border-emerald-100">
                                     <span class="text-[10px] font-black uppercase text-emerald-800">Profit Amount</span>
                                     <div class="text-lg font-black text-emerald-700 mt-1">Rs. ${d.profit.toLocaleString()}</div>
                                 </div>
-                                <div class="bg-amber-50 p-4 rounded-2xl border border-amber-100">
-                                    <span class="text-[10px] font-black uppercase text-amber-800">Remaining Live Stock Quantity</span>
+                                <div class="bg-amber-50 p-4 rounded-2xl border border-amber-100 col-span-2 sm:col-span-1">
+                                    <span class="text-[10px] font-black uppercase text-amber-800">Remaining Live Stock</span>
                                     <div class="text-lg font-black text-amber-900 mt-1">${d.remaining.toFixed(1)} kg</div>
                                 </div>
                             </div>
+                        </div>
+
+                        <!-- Purchase Logs for this Date -->
+                        <div class="space-y-3">
+                            <h3 class="font-black text-xs text-slate-900 uppercase tracking-wider border-b border-slate-100 pb-2">Purchase Logs — ${catName} (${selectedDate})</h3>
+                            ${buildDailyLogsTable()}
                         </div>
                     </div>
                 </div>
             `;
         }
-
         /* --- ROUTE 5: DAILY STOCK PURCHASES (3 CATEGORY TABS WITH DATE PICKER) --- */
         function renderPurchasesView() {
             const t = translations[currentLang];
@@ -1571,273 +1741,8 @@
         }
 
         /* --- ROUTE 7: REPORTS & PROFESSIONAL RED/WHITE/BLACK PDF INVOICE GENERATOR --- */
-        function renderReportsView() {
-            const t = translations[currentLang];
-            return `
-                <div class="space-y-4 sm:space-y-6">
-                    <div class="bg-white p-4 sm:p-6 rounded-3xl border border-slate-200 shadow-sm flex flex-col sm:flex-row justify-between sm:items-center gap-3">
-                        <div>
-                            <span class="text-[10px] font-black uppercase tracking-widest text-brand-red">Official Financial Documents</span>
-                            <h2 class="text-lg sm:text-2xl font-black text-slate-900 uppercase">${t.reportsTitle}</h2>
-                            <p class="text-xs text-slate-500 font-medium">Generate, preview & download formatted PDF audit invoices</p>
-                        </div>
-                    </div>
 
-                    <!-- 3 Distinct PDF Download Cards -->
-                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-                        <!-- Report 1: Combined Sales -->
-                        <div class="bg-white p-5 rounded-3xl border border-slate-200 shadow-sm space-y-4 hover:border-brand-red transition">
-                            <div class="w-12 h-12 bg-red-50 text-brand-red rounded-2xl flex items-center justify-center text-xl font-black">
-                                <i class="fa-solid fa-receipt"></i>
-                            </div>
-                            <div>
-                                <h3 class="font-black text-sm text-slate-900 uppercase">1. Combined Sales Report</h3>
-                                <p class="text-xs text-slate-500 mt-1">Consolidated statement of Online COD and Physical POS Scale transactions.</p>
-                            </div>
-                            <button onclick="previewPDFReport('sales')" class="w-full bg-slate-900 hover:bg-brand-red text-white font-black py-3 rounded-xl text-xs uppercase transition shadow flex items-center justify-center gap-2">
-                                <i class="fa-solid fa-file-pdf text-xs"></i>
-                                <span>Preview & Download PDF</span>
-                            </button>
-                        </div>
 
-                        <!-- Report 2: Supplier Ageing -->
-                        <div class="bg-white p-5 rounded-3xl border border-slate-200 shadow-sm space-y-4 hover:border-brand-red transition">
-                            <div class="w-12 h-12 bg-red-50 text-brand-red rounded-2xl flex items-center justify-center text-xl font-black">
-                                <i class="fa-solid fa-building-columns"></i>
-                            </div>
-                            <div>
-                                <h3 class="font-black text-sm text-slate-900 uppercase">2. Supplier Ageing Report</h3>
-                                <p class="text-xs text-slate-500 mt-1">Outstanding ledger balances, credit days & supplier payment histories.</p>
-                            </div>
-                            <button onclick="previewPDFReport('supplier')" class="w-full bg-slate-900 hover:bg-brand-red text-white font-black py-3 rounded-xl text-xs uppercase transition shadow flex items-center justify-center gap-2">
-                                <i class="fa-solid fa-file-pdf text-xs"></i>
-                                <span>Preview & Download PDF</span>
-                            </button>
-                        </div>
-
-                        <!-- Report 3: Chicken Yield & Shrinkage -->
-                        <div class="bg-white p-5 rounded-3xl border border-slate-200 shadow-sm space-y-4 hover:border-brand-red transition">
-                            <div class="w-12 h-12 bg-red-50 text-brand-red rounded-2xl flex items-center justify-center text-xl font-black">
-                                <i class="fa-solid fa-drumstick-bite"></i>
-                            </div>
-                            <div>
-                                <h3 class="font-black text-sm text-slate-900 uppercase">3. Chicken Yield & Shrinkage</h3>
-                                <p class="text-xs text-slate-500 mt-1">Poultry weight loss calculation, offal ratio & wastage loss valuation.</p>
-                            </div>
-                            <button onclick="previewPDFReport('yield')" class="w-full bg-slate-900 hover:bg-brand-red text-white font-black py-3 rounded-xl text-xs uppercase transition shadow flex items-center justify-center gap-2">
-                                <i class="fa-solid fa-file-pdf text-xs"></i>
-                                <span>Preview & Download PDF</span>
-                            </button>
-                        </div>
-                    </div>
-                </div>
-            `;
-        }
-
-        const rs = n => 'Rs. ' + Number(n || 0).toLocaleString();
-
-        function rptTitle(title, meta) {
-            return `
-                <div class="space-y-1">
-                    <h2 class="text-lg font-black text-slate-900 uppercase tracking-tight">${title}</h2>
-                    <div class="flex flex-wrap gap-x-6 gap-y-1 text-[11px] text-slate-600 font-semibold">${meta.map(m => `<span><span class="text-slate-400 uppercase">${m[0]}:</span> ${m[1]}</span>`).join('')}</div>
-                </div>`;
-        }
-
-        function rptKpis(items) {
-            return `<div class="grid grid-cols-3 gap-3">${items.map(i => `
-                <div class="border border-slate-200 rounded-lg p-3">
-                    <div class="text-[9px] font-black uppercase text-slate-500">${i[0]}</div>
-                    <div class="text-base font-black ${i[2] || 'text-slate-900'} mt-0.5">${i[1]}</div>
-                </div>`).join('')}</div>`;
-        }
-
-        function rptTable(heading, heads, rows, foot, right) {
-            right = right || [];
-            const al = i => right.includes(i) ? 'text-right' : 'text-left';
-            return `
-                <div class="space-y-1.5">
-                    <h4 class="text-[11px] font-black uppercase text-slate-800 tracking-wide">${heading}</h4>
-                    <table class="w-full text-xs border-collapse">
-                        <thead>
-                            <tr class="bg-slate-900 text-white">${heads.map((h, i) => `<th class="py-2 px-2.5 font-bold uppercase text-[10px] ${al(i)}">${h}</th>`).join('')}</tr>
-                        </thead>
-                        <tbody>
-                            ${rows.length ? rows.map((r, ri) => `<tr class="${ri % 2 ? 'bg-slate-50' : 'bg-white'} border-b border-slate-200">${r.map((c, i) => `<td class="py-2 px-2.5 text-slate-800 ${al(i)}">${c}</td>`).join('')}</tr>`).join('') : `<tr><td colspan="${heads.length}" class="py-4 text-center text-slate-400 font-bold">No records for this date.</td></tr>`}
-                        </tbody>
-                        ${foot ? `<tfoot><tr class="border-t-2 border-slate-900 bg-slate-100 font-black">${foot.map((c, i) => `<td class="py-2 px-2.5 text-slate-900 ${al(i)}">${c}</td>`).join('')}</tr></tfoot>` : ''}
-                    </table>
-                </div>`;
-        }
-
-        function previewPDFReport(type) {
-            const modal = document.getElementById('printable-report-modal');
-            const titleEl = document.getElementById('pdf-modal-title');
-            const dateEl = document.getElementById('pdf-report-date');
-            const refEl = document.getElementById('pdf-ref-code');
-            const contentEl = document.getElementById('invoice-dynamic-content');
-            const cats = ['chicken', 'beef', 'mutton'];
-            const cap = c => c.charAt(0).toUpperCase() + c.slice(1);
-
-            dateEl.innerText = `Date: ${selectedDate}`;
-            refEl.innerText = `#AMH-${Math.floor(10000 + Math.random() * 90000)}`;
-
-            if (type === 'sales') {
-                titleEl.innerText = 'Combined Sales Official Statement';
-                const totOnline = cats.reduce((a, c) => a + dayEndSales[c].online, 0);
-                const totPhys = cats.reduce((a, c) => a + dayEndSales[c].physical, 0);
-                const totProfit = cats.reduce((a, c) => a + dayEndSales[c].profit, 0);
-                const gross = totOnline + totPhys;
-                contentEl.innerHTML = `
-                    ${rptTitle('Combined Sales Statement', [['Period', 'Single day, ' + selectedDate], ['Channels', 'Online + Shop Counter']])}
-                    ${rptKpis([['Online Revenue', rs(totOnline)], ['Shop Counter Revenue', rs(totPhys)], ['Total Revenue', rs(gross), 'text-brand-red']])}
-                    ${rptTable('Revenue by Category', ['Category', 'Online', 'Shop Counter', 'Total Revenue', 'Profit'],
-                        cats.map(c => [cap(c), rs(dayEndSales[c].online), rs(dayEndSales[c].physical), rs(dayEndSales[c].online + dayEndSales[c].physical), rs(dayEndSales[c].profit)]),
-                        ['Total', rs(totOnline), rs(totPhys), rs(gross), rs(totProfit)], [1, 2, 3, 4])}
-                    ${rptTable('Transactions by Channel', ['Channel', 'Transactions', 'Revenue', 'Payment Mode'], [
-                        ['Online Orders', '3 Orders', rs(totOnline), 'Cash on Delivery'],
-                        ['Shop Counter', '15 Sales', rs(totPhys), 'Cash / Card']
-                    ], ['Total', '18', rs(gross), ''], [1, 2])}
-                    <p class="text-[11px] text-slate-500">Profit is the amount earned after the cost of the meat sold. Gross profit margin for the day: <strong class="text-slate-800">${gross ? (totProfit / gross * 100).toFixed(1) : 0}%</strong></p>`;
-            } else if (type === 'supplier') {
-                titleEl.innerText = 'Supplier Outstanding Ageing Report';
-                const tb = suppliersData.reduce((a, x) => a + x.totalBought, 0);
-                const tp = suppliersData.reduce((a, x) => a + x.totalPaid, 0);
-                const tr = suppliersData.reduce((a, x) => a + x.remainingBalance, 0);
-                contentEl.innerHTML = `
-                    ${rptTitle('Supplier Account Statement', [['As of', selectedDate], ['Suppliers', suppliersData.length]])}
-                    ${rptKpis([['Total Purchased', rs(tb)], ['Total Paid', rs(tp), 'text-emerald-600'], ['Balance We Owe', rs(tr), 'text-brand-red']])}
-                    ${rptTable('Supplier Balances', ['Supplier', 'Phone', 'Purchased', 'Paid', 'Balance Owed', 'Status'],
-                        suppliersData.map(x => [`<strong>${x.name}</strong>`, x.phone, rs(x.totalBought), rs(x.totalPaid), `<strong class="${x.remainingBalance ? 'text-brand-red' : 'text-emerald-600'}">${rs(x.remainingBalance)}</strong>`, x.remainingBalance ? 'Payable' : 'Settled']),
-                        ['Total', '', rs(tb), rs(tp), rs(tr), ''], [2, 3, 4])}
-                    <p class="text-[11px] text-slate-500">Balance Owed is the amount still to be paid to the supplier (Purchased minus Paid).</p>`;
-            } else if (type === 'yield') {
-                titleEl.innerText = 'Wastage & Yield Report';
-                const day = wastageLog.filter(w => w.date === selectedDate);
-                const chBuy = purchasesData.filter(p => p.category === 'chicken' && p.date === selectedDate);
-                const chWaste = day.filter(w => w.category === 'chicken');
-                const live = chBuy.reduce((a, p) => a + p.weight, 0);
-                const birds = chBuy.reduce((a, p) => a + (p.birds || 0), 0);
-                const wasteKg = chWaste.reduce((a, w) => a + w.weight, 0);
-                const kDay = kacharaSales.filter(k => k.date === selectedDate);
-                const kSale = kDay.reduce((a, k) => a + k.total, 0);
-                const kKg = kDay.reduce((a, k) => a + k.weight, 0);
-                const chLoss = chWaste.reduce((a, w) => a + w.costLoss, 0);
-                const totKg = day.reduce((a, w) => a + w.weight, 0);
-                const totLoss = day.reduce((a, w) => a + w.costLoss, 0);
-                contentEl.innerHTML = `
-                    ${rptTitle('Wastage & Yield Report', [['Date', selectedDate], ['Entries', day.length]])}
-                    ${rptKpis([['Total Wastage', totKg.toFixed(1) + ' kg'], ['Total Loss Value', rs(totLoss), 'text-brand-red'], ['Kachara Sale (Chicken)', rs(kSale), 'text-emerald-600']])}
-                    ${rptTable('Chicken Yield', ['Item', 'Value'], [
-                        ['Live weight bought' + (birds ? ' (' + birds + ' birds)' : ''), live.toFixed(1) + ' kg'],
-                        ['Wastage / offal weight', wasteKg.toFixed(1) + ' kg' + (live ? ' (' + (wasteKg / live * 100).toFixed(2) + '%)' : '')],
-                        ['Net selling weight', (live - wasteKg).toFixed(1) + ' kg'],
-                        ['Loss value of wastage', rs(chLoss)],
-                        ['Kachara sold at shop (' + kKg.toFixed(1) + ' kg)', rs(kSale)]
-                    ], ['Net loss after kachara sale', rs(chLoss - kSale)], [1])}
-                    ${rptTable('Wastage Details (All Categories)', ['Category', 'Details', 'Supplier', 'Weight', 'Rate / kg', 'Loss Value'],
-                        day.map(w => [cap(w.category), w.kacharaDetails, w.supplier, w.weight + ' kg', rs(w.rate), rs(w.costLoss)]),
-                        ['Total', '', '', totKg.toFixed(1) + ' kg', '', rs(totLoss)], [3, 4, 5])}
-                    ${rptTable('Chicken Kachara Sold at Shop', ['Date', 'Weight Sold', 'Sale Rate / kg', 'Sale Amount'],
-                        kDay.map(k => [k.date, k.weight + ' kg', rs(k.rate), rs(k.total)]),
-                        ['Total', kKg.toFixed(1) + ' kg', '', rs(kSale)], [1, 2, 3])}`;
-            }
-
-            modal.classList.remove('hidden');
-        }
-
-        function closeReportModal() {
-            document.getElementById('printable-report-modal').classList.add('hidden');
-        }
-
-        /* --- ROUTE 8: SUPPLIERS LEDGER VIEW --- */
-        function renderSuppliersView() {
-            const t = translations[currentLang];
-            return `
-                <div class="space-y-4 sm:space-y-6">
-                    <div class="bg-white p-4 sm:p-6 rounded-3xl border border-slate-200 shadow-sm flex flex-col sm:flex-row justify-between sm:items-center gap-3">
-                        <div>
-                            <span class="text-[10px] font-black uppercase tracking-widest text-brand-red">Payables Ledger</span>
-                            <h2 class="text-lg sm:text-2xl font-black text-slate-900 uppercase">Suppliers & Credit Balances</h2>
-                            <p class="text-xs text-slate-500 font-medium">Track supplier phone numbers, credit payments & statements</p>
-                        </div>
-                    </div>
-
-                    <div class="bg-white rounded-3xl border border-slate-200 shadow-sm overflow-hidden">
-                        <div class="p-4 sm:p-5 border-b border-slate-100 flex justify-between items-center">
-                            <h3 class="font-black text-xs text-slate-900 uppercase tracking-wider">Registered Suppliers List</h3>
-                            <button onclick="openSupplierModal()" class="bg-brand-red hover:bg-brand-redHover text-white font-black px-3 py-1.5 rounded-xl text-xs uppercase shadow-sm">
-                                + Add Supplier
-                            </button>
-                        </div>
-                        <div class="overflow-x-auto w-full">
-                            <table class="w-full text-left rtl:text-right text-xs text-slate-800 whitespace-nowrap min-w-[650px]">
-                                <thead class="bg-slate-50 text-slate-500 uppercase font-black text-[10px] border-b border-slate-200">
-                                    <tr>
-                                        <th class="p-3.5">Supplier Name</th>
-                                        <th class="p-3.5">Phone</th>
-                                        <th class="p-3.5">Total Bought</th>
-                                        <th class="p-3.5">Total Paid</th>
-                                        <th class="p-3.5">Balance Owed</th>
-                                        <th class="p-3.5">Action</th>
-                                    </tr>
-                                </thead>
-                                <tbody class="divide-y divide-slate-100 font-medium">
-                                    ${suppliersData.map(s => `
-                                        <tr class="hover:bg-slate-50 transition">
-                                            <td class="p-3.5 font-black text-slate-900">${s.name}</td>
-                                            <td class="p-3.5 text-slate-600 font-bold">${s.phone}</td>
-                                            <td class="p-3.5 font-black text-slate-900">Rs. ${s.totalBought.toLocaleString()}</td>
-                                            <td class="p-3.5 text-emerald-600 font-bold">Rs. ${s.totalPaid.toLocaleString()}</td>
-                                            <td class="p-3.5 text-red-600 font-black">Rs. ${s.remainingBalance.toLocaleString()}</td>
-                                            <td class="p-3.5">
-                                                <button onclick="alert('Statement sent to WhatsApp: ' + '${s.phone}')" class="bg-emerald-50 text-emerald-700 hover:bg-emerald-100 font-black px-2.5 py-1 rounded-lg text-[10px] transition flex items-center gap-1">
-                                                    <i class="fa-brands fa-whatsapp text-xs"></i> Send Ledger
-                                                </button>
-                                            </td>
-                                        </tr>
-                                    `).join('')}
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-                </div>
-            `;
-        }
-
-        /* --- ADD SUPPLIER FORM --- */
-        function openSupplierModal() {
-            ['sup-name', 'sup-phone', 'sup-balance'].forEach(id => document.getElementById(id).value = '');
-            document.getElementById('sup-error').classList.add('hidden');
-            document.getElementById('modal-add-supplier').classList.remove('hidden');
-            document.getElementById('sup-name').focus();
-        }
-
-        function closeSupplierModal() {
-            document.getElementById('modal-add-supplier').classList.add('hidden');
-        }
-
-        function saveSupplier() {
-            const name = document.getElementById('sup-name').value.trim();
-            const phone = document.getElementById('sup-phone').value.trim();
-            const balance = parseFloat(document.getElementById('sup-balance').value) || 0;
-            const err = document.getElementById('sup-error');
-            if (!name || !phone) {
-                err.innerText = 'Please enter the supplier name and phone number.';
-                err.classList.remove('hidden');
-                return;
-            }
-            suppliersData.push({
-                name: name,
-                phone: phone,
-                totalBought: balance,
-                totalPaid: 0,
-                remainingBalance: balance,
-                lastStatus: balance > 0 ? 'Full Credit' : 'New'
-            });
-            closeSupplierModal();
-            router.render();
-        }
 
         // INITIAL ROUTE SETUP ON PAGE LOAD
         window.onload = function() {
